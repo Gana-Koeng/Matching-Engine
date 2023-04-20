@@ -17,7 +17,7 @@ public class TestHashMap {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
-    @GetMapping(value = {"api/v1/test/hashmap"})
+    @GetMapping(value = {"api/v1/test1/hashmap"})
     BaseResponse TestHashMap() {
         BaseResponse response = new BaseResponse();
 

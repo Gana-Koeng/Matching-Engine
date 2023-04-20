@@ -1,14 +1,13 @@
-package CSX.MatchingEngine.app.Entity.orders;
+package CSX.MatchingEngine.app.Entity.broker;
 
 import lombok.Getter;
 import lombok.Setter;
-
 import java.math.BigInteger;
 import java.sql.Date;
 
 @Setter
 @Getter
-public class Order {
+public class Broker{
 
     private int orderNo;
     private Date orderDate;
