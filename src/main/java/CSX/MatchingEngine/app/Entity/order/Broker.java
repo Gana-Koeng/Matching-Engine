@@ -1,4 +1,4 @@
-package CSX.MatchingEngine.app.Entity.broker;
+package CSX.MatchingEngine.app.Entity.order;
 
 import lombok.Getter;
 import lombok.Setter;
