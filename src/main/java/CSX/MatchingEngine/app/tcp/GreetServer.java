@@ -35,8 +35,17 @@ public class GreetServer {
         clientSocket.close();
         serverSocket.close();
     }
-    public static void main(String[] args) {
+
+    void saySth(){
+        System.out.println("Hello");
+    }
+    public static void main(String[] args) throws Exception {
         GreetServer server=new GreetServer();
-        server.start(5000);
+        try{
+            server.start(5000);
+        }catch (Exception e){
+            server.stop();
+            throw e;
+        }
     }
 }
