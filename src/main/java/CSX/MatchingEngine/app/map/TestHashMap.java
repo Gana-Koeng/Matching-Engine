@@ -33,16 +33,17 @@ public class TestHashMap {
         BaseResponse response = new BaseResponse();
         HashMap<String, List<Order>> hm = new HashMap<>();
 
-        String tcpString = "";
-        try {
-            messageService.start(TCP_PORT);
-            System.out.println("msg server start");
-
-            tcpString = messageService.getMsg();
-            System.out.println(tcpString);
-        } catch (Exception e) {
-            messageService.stop();
-        }
+//        String tcpString = "";
+//        try {
+//            messageService.start(TCP_PORT);
+//            System.out.println("msg server start");
+//
+//            System.out.println(messageService);
+//            tcpString = messageService.getMsg();
+//            System.out.println(tcpString);
+//        } catch (Exception e) {
+//            messageService.stop();
+//        }
 
 //        int i = 0;
 //        List<Order> orderList = new ArrayList<>();

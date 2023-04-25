@@ -1,6 +1,9 @@
 package CSX.MatchingEngine.app;
 
 import CSX.MatchingEngine.app.service.MessageService;
+import CSX.MatchingEngine.app.websocket.etc.IpHandshakeInterceptor;
+import CSX.MatchingEngine.app.websocket.etc.RawSocketHandler;
+import CSX.MatchingEngine.app.websocket.send.QuotationDataSending;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashMap;
@@ -19,15 +22,21 @@ public class MatchingEngineApplication {
 
 		MessageService messageService = new MessageService();
 
+
 		String tcpString = "";
-		try {
-			messageService.start(TCP_PORT);
-			System.out.println("msg server start");
-			tcpString = messageService.getMsg();
-			System.out.println(tcpString);
-		} catch (Exception e) {
-			messageService.stop();
-		}
+        while (true) {
+            try {
+
+                messageService.start(TCP_PORT);
+                System.out.println("msg server start");
+                tcpString = messageService.getMsg();
+                System.out.println(tcpString);
+
+            } catch (Exception e) {
+                messageService.stop();
+            }
+        }
+//		quotationDataSending.sending(rawSocketHandler);
 
 	}
 
