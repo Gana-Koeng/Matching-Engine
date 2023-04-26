@@ -19,11 +19,7 @@ public class MessageService {
     public void start(int port) {
         try{
             serverSocket = new ServerSocket(port);
-            while(true){
-                clientSocket = serverSocket.accept();
-                System.out.println(clientSocket.getLocalAddress());
-                System.out.println(clientSocket.getLocalPort());
-            }
+
         }catch (Exception e){
             System.out.println(e);
         }
@@ -31,12 +27,11 @@ public class MessageService {
 
     public String getMsg() throws Exception{
 
-        System.out.println("Ip Address: "+ clientSocket.getLocalAddress());
-        System.out.println("Port: " + clientSocket.getLocalPort());
+        clientSocket = serverSocket.accept();
         out = new PrintWriter(clientSocket.getOutputStream(), true);
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         String msg = in.readLine();
-        System.out.println("Message : " + msg);
+
 
         return msg;
     }

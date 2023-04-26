@@ -37,41 +37,40 @@ public class TestHashMap {
         try {
             messageService.start(TCP_PORT);
             System.out.println("msg server start");
-
             tcpString = messageService.getMsg();
             System.out.println(tcpString);
         } catch (Exception e) {
             messageService.stop();
         }
 
-//        int i = 0;
-//        List<Order> orderList = new ArrayList<>();
-//
-//        while (i < 3) {
-//            Order order = new Order();
-//            order.issueCode = tcpString.substring(0, 5);
-////            order.issueCode = "KH0001";
-//            order.orderType = "2";
-//            order.orderPrice = 5000;
-//            order.accNo = "00100" + i;
-//
-//            String key = order.issueCode + order.orderType + order.orderPrice + order.accNo;
-//
-//            if (hm.get(key) == null) {
-//                orderList.add(order);
-//            } else {
-//                orderList = hm.get(key);
-//                orderList.add(order);
-//            }
-//
-//            hm.put(key, orderList);
-//            i++;
-//        }
-//
-//        quotationDataSending.sending(rawSocketHandler);
-//
-//
-//        System.out.println("Initial list of elements: " + hm);
+        int i = 0;
+        List<Order> orderList = new ArrayList<>();
+
+        while (i < 3) {
+            Order order = new Order();
+            order.issueCode = tcpString.substring(0, 3);
+//            order.issueCode = "KH0001";
+            order.orderType = tcpString.substring(6, 11);
+            order.orderPrice = 5000;
+            order.accNo = "00100" + i;
+
+            String key = order.issueCode ;
+
+            if (hm.get(key) == null) {
+                orderList.add(order);
+            } else {
+                orderList = hm.get(key);
+                orderList.add(order);
+            }
+
+            hm.put(key, orderList);
+            i++;
+        }
+
+        quotationDataSending.sending(rawSocketHandler);
+
+
+        System.out.println("Initial list of elements: " + hm);
         return response;
 
 
