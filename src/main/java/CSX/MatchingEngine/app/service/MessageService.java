@@ -1,6 +1,5 @@
 package CSX.MatchingEngine.app.service;
 
-import CSX.MatchingEngine.app.tcp.GreetServer;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -17,34 +16,33 @@ public class MessageService {
     private BufferedReader in;
 
     public void start(int port) {
-        try{
+        try {
             serverSocket = new ServerSocket(port);
-            clientSocket = serverSocket.accept();
-
-
-
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e);
+        }
+
+    }
+
+    public String getMsg() throws Exception {
+        clientSocket = serverSocket.accept();
+//        out = new PrintWriter(clientSocket.getOutputStream(), true);
+        while (true) {
+            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            String msg = in.readLine();
+            return msg;
         }
     }
 
-    public String getMsg() throws Exception{
-
-        out = new PrintWriter(clientSocket.getOutputStream(), true);
-        in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-        String msg = in.readLine();
-
-        return msg;
-    }
-
     public void stop() {
-        try{
+        try {
             in.close();
             out.close();
             clientSocket.close();
             serverSocket.close();
-        }catch (Exception e){
-            System.out.println(e);;
+        } catch (Exception e) {
+            System.out.println(e);
+            ;
         }
     }
 }
