@@ -1,19 +1,31 @@
 package CSX.MatchingEngine.app;
 
 import CSX.MatchingEngine.app.service.MessageService;
+import CSX.MatchingEngine.app.websocket.etc.IpHandshakeInterceptor;
+import CSX.MatchingEngine.app.websocket.etc.RawSocketHandler;
+import CSX.MatchingEngine.app.websocket.send.QuotationDataSending;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 
+@SpringBootApplication
 public class MatchingEngineApplication {
 
 
     private static final int TCP_PORT = 5000;
 
     public static void main(String[] args) {
+        IpHandshakeInterceptor ipHandshakeInterceptor = new IpHandshakeInterceptor();
 
+        RawSocketHandler rawSocketHandler = new RawSocketHandler(ipHandshakeInterceptor);
+
+        QuotationDataSending quotationDataSending = new QuotationDataSending();
+
+        SpringApplication.run(MatchingEngineApplication.class, args);
 
         BaseResponse response = new BaseResponse();
         HashMap<String, List<Order>> hm = new HashMap<>();
@@ -21,6 +33,7 @@ public class MatchingEngineApplication {
         MessageService messageService = new MessageService();
 
         String tcpString = "";
+        quotationDataSending.sending(rawSocketHandler, "testeteets");
 
         try {
             messageService.start(TCP_PORT);
@@ -56,13 +69,13 @@ public class MatchingEngineApplication {
 
 //                    quotationDataSending.sending(rawSocketHandler);
 //Test String
-//                System.out.println("issueCode: " + hm.get(key).get(0).issueCode);
-//                System.out.println("orderType: " + hm.get(key).get(0).orderType);
-//                System.out.println("brokerId : " + hm.get(key).get(0).brokerId);
-//                System.out.println("accountNo: " + hm.get(key).get(0).accountNo);
-//                System.out.println("orderQty : " + hm.get(key).get(0).orderQty);
-//                System.out.println("orderUV : " + hm.get(key).get(0).orderUV);
-//                System.out.println("orderDate: " + hm.get(key).get(0).orderDate);
+                System.out.println("issueCode: " + hm.get(key).get(0).issueCode);
+                System.out.println("orderType: " + hm.get(key).get(0).orderType);
+                System.out.println("brokerId : " + hm.get(key).get(0).brokerId);
+                System.out.println("accountNo: " + hm.get(key).get(0).accountNo);
+                System.out.println("orderQty : " + hm.get(key).get(0).orderQty);
+                System.out.println("orderUV : " + hm.get(key).get(0).orderUV);
+                System.out.println("orderDate: " + hm.get(key).get(0).orderDate);
 
                 System.out.println("Initial list of elements: " + hm);
 //                    return response;
@@ -70,8 +83,6 @@ public class MatchingEngineApplication {
         } catch (Exception e) {
             System.out.println(e);
         }
-
-//		quotationDataSending.sending(rawSocketHandler);
 
 
     }

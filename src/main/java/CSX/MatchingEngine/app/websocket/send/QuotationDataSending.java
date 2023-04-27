@@ -10,10 +10,12 @@ import static java.lang.String.format;
 @Log4j2
 public class QuotationDataSending {
 
-    public void sending(RawSocketHandler rawSocketHandler) {
-        String msgSend = "Its work";
-        log.info("Send growth board market data [{}]", msgSend); //console.log in intellij
-            rawSocketHandler.sendAll(msgSend);
+    public void sending(RawSocketHandler rawSocketHandler, String test) {
+
+        System.out.println("Sending");
+//        String msgSend = "Its work";
+//        log.info("Send growth board market data [{}]", msgSend); //console.log in intellij
+//            rawSocketHandler.sendAll(msgSend);
 
 //        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 //        String formattedDate = sdf.format(broker.getOrderDate());
@@ -38,7 +40,7 @@ public class QuotationDataSending {
 //                                format("%08d", broker.getOrderUV())                       +
 //                                format("%08d", broker.getOrderUV())                       + formattedDate;
 //            log.info("Send growth board market data [{}]", msgSend); //console.log in intellij
-//            rawSocketHandler.sendAll(msgSend);
+            rawSocketHandler.sendAll(test);
 //        }
     }
 }
