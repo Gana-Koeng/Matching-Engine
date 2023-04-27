@@ -78,7 +78,19 @@ public class MatchingEngineApplication {
                 System.out.println("orderDate: " + hm.get(key).get(0).orderDate);
 
                 System.out.println("Initial list of elements: " + hm);
-//                    return response;
+
+                for(Order ord : hm.get(key)){
+                    ord.orderQty = ord.orderQty;
+                    System.out.println("List OrderQty:");
+                    System.out.println(ord.orderQty);
+                }
+//                Summation of value loop
+
+
+
+
+//                System.out.println("After Summation orderQty:" + );
+
             }
         } catch (Exception e) {
             System.out.println(e);
