@@ -40,7 +40,7 @@ public class GreetClient {
         try
         {
             while(true){
-            client.startConnection("10.10.18.162", 5000);
+            client.startConnection("10.10.18.179", 5000);
 
             client.sendMessage("okai love okkkkk ");
             }
