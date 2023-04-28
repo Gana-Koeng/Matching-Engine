@@ -33,7 +33,7 @@ public class MatchingEngineApplication {
         MessageService messageService = new MessageService();
 
         String tcpString = "";
-        quotationDataSending.sending(rawSocketHandler, "testeteets");
+//        quotationDataSending.sending(rawSocketHandler, "testeteets");
 
         try {
             messageService.start(TCP_PORT);
@@ -78,28 +78,25 @@ public class MatchingEngineApplication {
                 System.out.println("orderDate: " + hm.get(key).get(0).orderDate);
 
                 System.out.println("Initial list of elements: " + hm);
-
-                for(Order ord : hm.get(key)){
-                    ord.orderQty = ord.orderQty;
                     System.out.println("List OrderQty:");
-                    System.out.println(ord.orderQty);
+
+                int sum  = 0;
+                for (Order ord : hm.get(key)) {
+                    sum += ord.orderQty;
+                    System.out.println("Total Order quantity: " + sum);
                 }
+
 //                Summation of value loop
-
-
-
-
-//                System.out.println("After Summation orderQty:" + );
-
+//                    int sum = 0;
+//                    for (int value : hm.get(key).get(0).orderQty) {
+//                        sum += value;
+//                    }
+//                System.out.println("Sum of data numbers: " + sum);
             }
         } catch (Exception e) {
             System.out.println(e);
         }
-
-
     }
-
-
     static class Order {
         String issueCode;
         String accountNo;
