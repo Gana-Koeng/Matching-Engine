@@ -27,12 +27,13 @@ public class MatchingEngineApplication {
         try {
             messageService.start(TCP_PORT);
             while (true) {
-                // System.out.println("Great! Get Message Successfully\uD83E\uDD24");
+
                 System.out.println(" ");
                 tcpString = messageService.getMsg();
                 System.out.println("Message: " + tcpString);
                 List<Order> orderList = new ArrayList<>();
                 Order order = new Order();
+
                 //Sub String From Message Get from TCP broker
                 order.issueCode = tcpString.substring(2, 12);
                 order.orderType = Integer.parseInt(tcpString.substring(12, 13));
@@ -42,33 +43,38 @@ public class MatchingEngineApplication {
                 order.orderUV = Integer.parseInt(tcpString.substring(42, 52));
                 order.orderDate = Integer.parseInt(tcpString.substring(52, 60));
 
-                String key = order.issueCode + order.orderUV + order.orderType;
+                String key = order.issueCode + order.orderUV ;
 
                 if (hm.get(key) == null) {
                     orderList.add(order);
-                } else {
+                }
+                if(hm.get(key) != null){
                     orderList = hm.get(key);
                     orderList.add(order);
                 }
                 hm.put(key, orderList);
-
-                //Test String
-
-                System.out.println("issueCode: " + hm.get(key).get(0).issueCode);
-                System.out.println("orderType: " + hm.get(key).get(0).orderType);
-                System.out.println("brokerId : " + hm.get(key).get(0).brokerId);
-                System.out.println("accountNo: " + hm.get(key).get(0).accountNo);
-                System.out.println("orderQty : " + hm.get(key).get(0).orderQty);
-                System.out.println("orderUV  : " + hm.get(key).get(0).orderUV);
-                System.out.println("orderDate: " + hm.get(key).get(0).orderDate);
+//                System.out.println("issueCode: " + hm.get(key).get(0).issueCode);
+//                System.out.println("orderType: " + hm.get(key).get(0).orderType);
+//                System.out.println("brokerId : " + hm.get(key).get(0).brokerId);
+//                System.out.println("accountNo: " + hm.get(key).get(0).accountNo);
+//                System.out.println("orderQty : " + hm.get(key).get(0).orderQty);
+//                System.out.println("orderUV  : " + hm.get(key).get(0).orderUV);
+//                System.out.println("orderDate: " + hm.get(key).get(0).orderDate);
 
                 System.out.println("Initial list of elements: " + hm);
-                int sum  = 0;
+//                System.out.println("All key: " + hm.keySet());
+
+                int total_qty = 0;
+
                 for (Order ord : hm.get(key)) {
-                    sum += ord.orderQty;
-                    System.out.println("Total Order quantity: " + sum);
+                    if (ord.orderType == order.orderType) {
+                        total_qty += ord.orderQty;
+                    }
+                    if(ord.orderType != order.orderType){
+                        total_qty -= ord.orderQty;
+                    }
                 }
-//sum all quality for each of key
+                System.out.println("Total Order quantity: " + total_qty);
             }
         } catch (Exception e) {
             messageService.stop();
