@@ -1,39 +1,51 @@
 package CSX.MatchingEngine.app;
 
 import CSX.MatchingEngine.app.service.MessageService;
+import CSX.MatchingEngine.app.websocket.etc.IpHandshakeInterceptor;
 import CSX.MatchingEngine.app.websocket.etc.RawSocketHandler;
 import CSX.MatchingEngine.app.websocket.send.QuotationDataSending;
 import org.springframework.boot.SpringApplication;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+
+@SpringBootApplication
 public class MatchingEngineApplication {
+
+
     private static final int TCP_PORT = 5000;
 
-    public static QuotationDataSending quotationDataSending;
-    public static RawSocketHandler rawSocketHandler;
-
-
     public static void main(String[] args) {
-//        BaseResponse response = new BaseResponse();
+        IpHandshakeInterceptor ipHandshakeInterceptor = new IpHandshakeInterceptor();
 
+        RawSocketHandler rawSocketHandler = new RawSocketHandler(ipHandshakeInterceptor);
+
+        QuotationDataSending quotationDataSending = new QuotationDataSending();
+
+        SpringApplication.run(MatchingEngineApplication.class, args);
+
+        BaseResponse response = new BaseResponse();
         HashMap<String, List<Order>> hm = new HashMap<>();
-        HashMap<Integer, List<Execution>> ex = new HashMap<>();
+
         MessageService messageService = new MessageService();
+
         String tcpString = "";
+//        quotationDataSending.sending(rawSocketHandler, "testeteets");
+
         try {
             messageService.start(TCP_PORT);
             while (true) {
-
-                System.out.println(" ");
+                // System.out.println("Great! Get Message Successfully\uD83E\uDD24");
                 tcpString = messageService.getMsg();
                 System.out.println("Message: " + tcpString);
+                int i = 0;
                 List<Order> orderList = new ArrayList<>();
-                Order order = new Order();
 
+
+                Order order = new Order();
                 //Sub String From Message Get from TCP broker
                 order.issueCode = tcpString.substring(2, 12);
                 order.orderType = Integer.parseInt(tcpString.substring(12, 13));
@@ -43,46 +55,48 @@ public class MatchingEngineApplication {
                 order.orderUV = Integer.parseInt(tcpString.substring(42, 52));
                 order.orderDate = Integer.parseInt(tcpString.substring(52, 60));
 
-                String key = order.issueCode + order.orderUV ;
+                String key = order.issueCode + order.orderType + order.orderUV + order.accountNo;
 
                 if (hm.get(key) == null) {
                     orderList.add(order);
-                }
-                if(hm.get(key) != null){
+                } else {
                     orderList = hm.get(key);
                     orderList.add(order);
                 }
+
                 hm.put(key, orderList);
-//                System.out.println("issueCode: " + hm.get(key).get(0).issueCode);
-//                System.out.println("orderType: " + hm.get(key).get(0).orderType);
-//                System.out.println("brokerId : " + hm.get(key).get(0).brokerId);
-//                System.out.println("accountNo: " + hm.get(key).get(0).accountNo);
-//                System.out.println("orderQty : " + hm.get(key).get(0).orderQty);
-//                System.out.println("orderUV  : " + hm.get(key).get(0).orderUV);
-//                System.out.println("orderDate: " + hm.get(key).get(0).orderDate);
+
+
+//                    quotationDataSending.sending(rawSocketHandler);
+//Test String
+                System.out.println("issueCode: " + hm.get(key).get(0).issueCode);
+                System.out.println("orderType: " + hm.get(key).get(0).orderType);
+                System.out.println("brokerId : " + hm.get(key).get(0).brokerId);
+                System.out.println("accountNo: " + hm.get(key).get(0).accountNo);
+                System.out.println("orderQty : " + hm.get(key).get(0).orderQty);
+                System.out.println("orderUV : " + hm.get(key).get(0).orderUV);
+                System.out.println("orderDate: " + hm.get(key).get(0).orderDate);
 
                 System.out.println("Initial list of elements: " + hm);
-//                System.out.println("All key: " + hm.keySet());
+                    System.out.println("List OrderQty:");
 
-                int total_qty = 0;
-
+                int sum  = 0;
                 for (Order ord : hm.get(key)) {
-                    if (ord.orderType == order.orderType) {
-                        total_qty += ord.orderQty;
-                    }
-                    if(ord.orderType != order.orderType){
-                        total_qty -= ord.orderQty;
-                    }
+                    sum += ord.orderQty;
+                    System.out.println("Total Order quantity: " + sum);
                 }
-                System.out.println("Total Order quantity: " + total_qty);
+
+//                Summation of value loop
+//                    int sum = 0;
+//                    for (int value : hm.get(key).get(0).orderQty) {
+//                        sum += value;
+//                    }
+//                System.out.println("Sum of data numbers: " + sum);
             }
         } catch (Exception e) {
-            messageService.stop();
+            System.out.println(e);
         }
-//        quotationDataSending.sending(rawSocketHandler,"work");
     }
-
-
     static class Order {
         String issueCode;
         String accountNo;
@@ -91,10 +105,8 @@ public class MatchingEngineApplication {
         int orderUV;
         int orderQty;
         int orderDate;
-    }
 
-    static class Execution {
-        int executionQty;
+
     }
 
 }
