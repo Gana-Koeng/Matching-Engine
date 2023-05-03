@@ -1,5 +1,6 @@
 package CSX.MatchingEngine.app.websocket.send;
 
+import CSX.MatchingEngine.app.service.MessageService;
 import CSX.MatchingEngine.app.websocket.etc.RawSocketHandler;
 
 import lombok.extern.log4j.Log4j2;
@@ -14,10 +15,10 @@ import static java.lang.String.format;
 @Log4j2
 public class QuotationDataSending {
 
-    public void sending(RawSocketHandler rawSocketHandler,String args) {
-        String msgSend = "Work";
+    public void sending(RawSocketHandler rawSocketHandler, MessageService messageService) throws Exception {
+        String msgSend = messageService.getMsg();;
         log.info("Send growth board market data [{}]", msgSend); //console.log in intellij
-            rawSocketHandler.sendAll(args);
+            rawSocketHandler.sendAll(msgSend);
 //        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 //        String formattedDate = sdf.format(Order.getOrderDate());
 //

@@ -33,8 +33,7 @@ public class MatchingEngineApplication {
         MessageService messageService = new MessageService();
 
         String tcpString = "";
-
-        quotationDataSending.sending(rawSocketHandler, "testeteets");
+//        quotationDataSending.sending(rawSocketHandler, "testeteets");
 
         try {
             messageService.start(TCP_PORT);
@@ -56,53 +55,40 @@ public class MatchingEngineApplication {
                 order.orderUV = Integer.parseInt(tcpString.substring(42, 52));
                 order.orderDate = Integer.parseInt(tcpString.substring(52, 60));
 
-                String key = order.issueCode + order.orderType + order.orderUV;
-
+                String key = order.issueCode + order.orderUV + order.accountNo;
+                int total_qty  = 0;
                 if (hm.get(key) == null) {
                     orderList.add(order);
-                }
-                if (hm.get(key) != null){
+                    total_qty = order.orderQty;
+                } else {
                     orderList = hm.get(key);
-//                    orderList = hm.get(key).order.orderType;
-//                    if (hm.get(key)=order.orderType)
-
-
                     orderList.add(order);
-                }
-
+                    for (Order ord : hm.get(key)) {
+                        if(ord.orderType==order.orderType){
+                            total_qty += ord.orderQty;
+                        }else {
+                            total_qty -= ord.orderQty;
+                        }
+                    }
+             }
                 hm.put(key, orderList);
-//                    quotationDataSending.sending(rawSocketHandler);
+
+
+//                quotationDataSending.sending(rawSocketHandler,messageService);
 //Test String
-                System.out.println("issueCode: " + hm.get(key).get(0).issueCode);
-                System.out.println("orderType: " + hm.get(key).get(0).orderType);
+
+//                System.out.println("issueCode: " + hm.get(key).get(0).issueCode);
+//                System.out.println("orderType: " + hm.get(key).get(0).orderType);
 //                System.out.println("brokerId : " + hm.get(key).get(0).brokerId);
 //                System.out.println("accountNo: " + hm.get(key).get(0).accountNo);
 //                System.out.println("orderQty : " + hm.get(key).get(0).orderQty);
-                System.out.println("orderUV : " + hm.get(key).get(0).orderUV);
+//                System.out.println("orderUV : " + hm.get(key).get(0).orderUV);
 //                System.out.println("orderDate: " + hm.get(key).get(0).orderDate);
+
                 System.out.println("Initial list of elements: " + hm);
-//                    System.out.println("List OrderQty:");
+                System.out.println("Total Order quantity: " + total_qty);
+                System.out.println(" ");
 
-
-
-
-
-                int sum  = 0;
-                for (Order ord : hm.get(key)) {
-                    sum += ord.orderQty;
-                    System.out.println("Total Order quantity: " + sum);
-                }
-
-
-
-
-
-//                Summation of value loop
-//                    int sum = 0;
-//                    for (int value : hm.get(key).get(0).orderQty) {
-//                        sum += value;
-//                    }
-//                System.out.println("Sum of data numbers: " + sum);
             }
         } catch (Exception e) {
             System.out.println(e);
