@@ -67,7 +67,7 @@ public class MatchingEngineApplication {
                         if(ord.orderType==order.orderType){
                             total_qty += ord.orderQty;
                         }else {
-                            total_qty -= ord.orderQty;
+                            total_qty = ord.orderQty;
                         }
                     }
              }
@@ -77,13 +77,13 @@ public class MatchingEngineApplication {
 //                quotationDataSending.sending(rawSocketHandler,messageService);
 //Test String
 
-//                System.out.println("issueCode: " + hm.get(key).get(0).issueCode);
-//                System.out.println("orderType: " + hm.get(key).get(0).orderType);
-//                System.out.println("brokerId : " + hm.get(key).get(0).brokerId);
-//                System.out.println("accountNo: " + hm.get(key).get(0).accountNo);
-//                System.out.println("orderQty : " + hm.get(key).get(0).orderQty);
-//                System.out.println("orderUV : " + hm.get(key).get(0).orderUV);
-//                System.out.println("orderDate: " + hm.get(key).get(0).orderDate);
+                System.out.println("issueCode: " + hm.get(key).get(0).issueCode);
+                System.out.println("orderType: " + hm.get(key).get(0).orderType);
+                System.out.println("brokerId : " + hm.get(key).get(0).brokerId);
+                System.out.println("accountNo: " + hm.get(key).get(0).accountNo);
+                System.out.println("orderQty : " + hm.get(key).get(0).orderQty);
+                System.out.println("orderUV : " + hm.get(key).get(0).orderUV);
+                System.out.println("orderDate: " + hm.get(key).get(0).orderDate);
 
                 System.out.println("Initial list of elements: " + hm);
                 System.out.println("Total Order quantity: " + total_qty);
