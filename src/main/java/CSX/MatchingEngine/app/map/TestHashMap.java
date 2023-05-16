@@ -15,17 +15,17 @@ import java.util.List;
 @RestController
 public class TestHashMap {
 
-//    final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-//    final QuotationDataSending quotationDataSending;
-//    final RawSocketHandler rawSocketHandler;
-//
-//
-//    public TestHashMap(NamedParameterJdbcTemplate namedParameterJdbcTemplate, QuotationDataSending quotationDataSending, RawSocketHandler rawSocketHandler, MessageService messageService) {
-//        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
-//        this.quotationDataSending = quotationDataSending;
-//        this.rawSocketHandler = rawSocketHandler;
-//
-//    }
+    final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    final QuotationDataSending quotationDataSending;
+    final RawSocketHandler rawSocketHandler;
+
+
+    public TestHashMap(NamedParameterJdbcTemplate namedParameterJdbcTemplate, QuotationDataSending quotationDataSending, RawSocketHandler rawSocketHandler, MessageService messageService) {
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+        this.quotationDataSending = quotationDataSending;
+        this.rawSocketHandler = rawSocketHandler;
+
+    }
 
     @GetMapping(value = {"api/v1"})
     BaseResponse TestHashMap() {

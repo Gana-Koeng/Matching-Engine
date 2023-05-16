@@ -19,11 +19,11 @@ public class MatchingEngineApplication {
     private static final int TCP_PORT = 5000;
 
     public static void main(String[] args) {
-        IpHandshakeInterceptor ipHandshakeInterceptor = new IpHandshakeInterceptor();
-
-        RawSocketHandler rawSocketHandler = new RawSocketHandler(ipHandshakeInterceptor);
-
-        QuotationDataSending quotationDataSending = new QuotationDataSending();
+//        IpHandshakeInterceptor ipHandshakeInterceptor = new IpHandshakeInterceptor();
+//
+//        RawSocketHandler rawSocketHandler = new RawSocketHandler(ipHandshakeInterceptor);
+//
+//        QuotationDataSending quotationDataSending = new QuotationDataSending();
 
         SpringApplication.run(MatchingEngineApplication.class, args);
 
@@ -55,37 +55,56 @@ public class MatchingEngineApplication {
                 order.orderUV = Integer.parseInt(tcpString.substring(42, 52));
                 order.orderDate = Integer.parseInt(tcpString.substring(52, 60));
 
-                String key = order.issueCode + order.orderUV + order.accountNo;
+                String key = order.issueCode + order.orderUV + order.orderType;
+
+                //make orderType : 1 = buy
+
+                String key_buy = order.issueCode + order.orderUV + 1 ;
+
+                //make orderType : 2 = sell
+
+                String key_sell = order.issueCode + order.orderUV + 2 ;
+
+                //make condition matching order with best price
+
                 int total_qty  = 0;
                 if (hm.get(key) == null) {
-                    orderList.add(order);
-                    total_qty = order.orderQty;
-                } else {
-                    orderList = hm.get(key);
-                    orderList.add(order);
-                    for (Order ord : hm.get(key)) {
-                        if(ord.orderType==order.orderType){
+                    if (hm.get(key_buy) != null){
+                        System.out.println("Null of Buy" + key_buy);
+                    }
+                    if (hm.get(key_sell) != null){
+                        System.out.println("Null of Sell" + key_sell);
+                    }
+                    }
+                    if (hm.get(key_buy) == null || hm.get(key_sell) == null)
+                    {
+                        orderList.add(order);
+                        total_qty = order.orderQty;
+                    }
+                if (hm.get(key) != null)
+                    {
+                        orderList = hm.get(key);
+                        orderList.add(order);
+                        for (Order ord : hm.get(key))
+                        {
                             total_qty += ord.orderQty;
-                        }else {
-                            total_qty = ord.orderQty;
+                            if(ord.orderType != order.orderType)
+                            {
+                                total_qty -= ord.orderQty;
+                            }
                         }
                     }
-             }
-                hm.put(key, orderList);
-
-
+                    hm.put(key, orderList);
+                //
+                //
+                //
+                //
+                //
+                //
 //                quotationDataSending.sending(rawSocketHandler,messageService);
 //Test String
-
                 System.out.println("issueCode: " + hm.get(key).get(0).issueCode);
-                System.out.println("orderType: " + hm.get(key).get(0).orderType);
-                System.out.println("brokerId : " + hm.get(key).get(0).brokerId);
-                System.out.println("accountNo: " + hm.get(key).get(0).accountNo);
-                System.out.println("orderQty : " + hm.get(key).get(0).orderQty);
-                System.out.println("orderUV : " + hm.get(key).get(0).orderUV);
-                System.out.println("orderDate: " + hm.get(key).get(0).orderDate);
-
-                System.out.println("Initial list of elements: " + hm);
+                System.out.println("Initial list of elements: " + hm );
                 System.out.println("Total Order quantity: " + total_qty);
                 System.out.println(" ");
 
@@ -102,8 +121,6 @@ public class MatchingEngineApplication {
         int orderUV;
         int orderQty;
         int orderDate;
-
-
     }
 
 }
