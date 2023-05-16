@@ -40,7 +40,8 @@ public class MatchingEngineApplication {
             while (true) {
                 // System.out.println("Great! Get Message Successfully\uD83E\uDD24");
                 tcpString = messageService.getMsg();
-                System.out.println("Message: " + tcpString);
+                System.out.println("");
+                System.out.println("Websocket Message: " + tcpString);
                 int i = 0;
                 List<Order> orderList = new ArrayList<>();
 
@@ -55,23 +56,40 @@ public class MatchingEngineApplication {
                 order.orderUV = Integer.parseInt(tcpString.substring(42, 52));
                 order.orderDate = Integer.parseInt(tcpString.substring(52, 60));
 
-                String key = order.issueCode + order.orderUV + order.accountNo;
-                int total_qty  = 0;
+                String key = order.issueCode + order.orderUV + order.orderType;
+                String key_buy = order.issueCode + order.orderUV + "1";
+                String key_sell = order.issueCode + order.orderUV + "2";
+
+                int total_qty = 0;
+
                 if (hm.get(key) == null) {
-                    orderList.add(order);
                     total_qty = order.orderQty;
+                    if (hm.get(key_buy) != null) {
+                        for (Order ord : hm.get(key_buy)) {
+                            total_qty = ord.orderQty - total_qty;
+//
+                        }
+                        System.out.println("QTY BUY: " + total_qty);
+
+                    } else if (hm.get(key_sell) != null) {
+                        for (Order ord : hm.get(key_sell)) {
+                            total_qty = ord.orderQty - total_qty;
+                        }
+                        System.out.println("QTY SELL: " + total_qty);
+                    } else {
+                        orderList.add(order);
+                        hm.put(key, orderList);
+                    }
+
                 } else {
                     orderList = hm.get(key);
                     orderList.add(order);
                     for (Order ord : hm.get(key)) {
-                        if(ord.orderType==order.orderType){
-                            total_qty += ord.orderQty;
-                        }else {
-                            total_qty -= ord.orderQty;
-                        }
+                        total_qty += ord.orderQty;
                     }
-             }
-                hm.put(key, orderList);
+                    hm.put(key, orderList);
+                }
+
 
 
 //                quotationDataSending.sending(rawSocketHandler,messageService);
@@ -94,6 +112,7 @@ public class MatchingEngineApplication {
             System.out.println(e);
         }
     }
+
     static class Order {
         String issueCode;
         String accountNo;
