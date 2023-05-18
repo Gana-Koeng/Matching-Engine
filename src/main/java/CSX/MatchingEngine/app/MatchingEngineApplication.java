@@ -73,7 +73,7 @@ public class MatchingEngineApplication {
 
                     } else if (hm.get(key_sell) != null) {
                         for (Order ord : hm.get(key_sell)) {
-                            total_qty = ord.orderQty - total_qty;
+                            total_qty = ord.orderQty + total_qty;
                         }
                         System.out.println("QTY SELL: " + total_qty);
                     } else {
