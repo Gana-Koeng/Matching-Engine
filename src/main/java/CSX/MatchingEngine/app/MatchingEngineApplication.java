@@ -63,20 +63,23 @@ public class MatchingEngineApplication {
                 int total_qty = 0;
 
                 if (hm.get(key) == null) {
-                    total_qty = order.orderQty;
                     if (hm.get(key_buy) != null) {
                         for (Order ord : hm.get(key_buy)) {
-                            total_qty = ord.orderQty - total_qty;
-//
+                            total_qty += ord.orderQty;
                         }
-                        System.out.println("QTY BUY: " + total_qty);
+                        total_qty -= order.orderQty;
+
+                        System.out.println("REMAIN QTY OF SELL: " + total_qty);
 
                     } else if (hm.get(key_sell) != null) {
                         for (Order ord : hm.get(key_sell)) {
-                            total_qty = ord.orderQty + total_qty;
+                            total_qty += ord.orderQty;
                         }
-                        System.out.println("QTY SELL: " + total_qty);
+                        total_qty -= order.orderQty;
+
+                        System.out.println("REMAIN QTY OF BUY: " + total_qty);
                     } else {
+                        total_qty = order.orderQty;
                         orderList.add(order);
                         hm.put(key, orderList);
                     }
@@ -91,7 +94,6 @@ public class MatchingEngineApplication {
                 }
 
 
-
 //                quotationDataSending.sending(rawSocketHandler,messageService);
 //Test String
 
@@ -104,7 +106,7 @@ public class MatchingEngineApplication {
 //                System.out.println("orderDate: " + hm.get(key).get(0).orderDate);
 
                 System.out.println("Initial list of elements: " + hm);
-                System.out.println("Total Order quantity: " + total_qty);
+                System.out.println("Total Order quantity of above key : " + total_qty);
                 System.out.println(" ");
 
             }
