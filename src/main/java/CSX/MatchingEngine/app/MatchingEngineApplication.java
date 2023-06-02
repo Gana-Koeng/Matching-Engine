@@ -1,17 +1,13 @@
 package CSX.MatchingEngine.app;
-
 import CSX.MatchingEngine.app.service.MessageService;
 import CSX.MatchingEngine.app.websocket.etc.IpHandshakeInterceptor;
 import CSX.MatchingEngine.app.websocket.etc.RawSocketHandler;
 import CSX.MatchingEngine.app.websocket.send.QuotationDataSending;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-
 @SpringBootApplication
 public class MatchingEngineApplication {
 
@@ -69,7 +65,7 @@ public class MatchingEngineApplication {
                         }
                         total_qty -= order.orderQty;
 
-                        System.out.println("REMAIN QTY OF SELL: " + total_qty);
+                        System.out.println("QTY OF SELL: " + total_qty);
 
                     } else if (hm.get(key_sell) != null) {
                         for (Order ord : hm.get(key_sell)) {
@@ -77,9 +73,9 @@ public class MatchingEngineApplication {
                         }
                         total_qty -= order.orderQty;
 
-                        System.out.println("REMAIN QTY OF BUY: " + total_qty);
+                        System.out.println("QTY OF BUY: " + total_qty);
                     } else {
-                        total_qty = order.orderQty;
+                        total_qty += order.orderQty;
                         orderList.add(order);
                         hm.put(key, orderList);
                     }
@@ -92,29 +88,14 @@ public class MatchingEngineApplication {
                     }
                     hm.put(key, orderList);
                 }
-
-
-//                quotationDataSending.sending(rawSocketHandler,messageService);
-//Test String
-
-//                System.out.println("issueCode: " + hm.get(key).get(0).issueCode);
-//                System.out.println("orderType: " + hm.get(key).get(0).orderType);
-//                System.out.println("brokerId : " + hm.get(key).get(0).brokerId);
-//                System.out.println("accountNo: " + hm.get(key).get(0).accountNo);
-//                System.out.println("orderQty : " + hm.get(key).get(0).orderQty);
-//                System.out.println("orderUV : " + hm.get(key).get(0).orderUV);
-//                System.out.println("orderDate: " + hm.get(key).get(0).orderDate);
-
                 System.out.println("Initial list of elements: " + hm);
                 System.out.println("Total Order quantity of above key : " + total_qty);
                 System.out.println(" ");
-
             }
         } catch (Exception e) {
             System.out.println(e);
         }
     }
-
     static class Order {
         String issueCode;
         String accountNo;
